@@ -13,6 +13,24 @@ class EmergencyNumScreen extends StatelessWidget {
     }
   }
 
+  Widget _buildEmergencyTile(String title, String number, IconData icon, Color color) {
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      elevation: 4.0,
+      shadowColor: color.withOpacity(0.5),
+      child: ListTile(
+        leading: Icon(icon, color: color),
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Text(number, style: TextStyle(color: Colors.grey[600])),
+        trailing: Icon(Icons.call, color: Colors.green[700]),
+        onTap: () => _makePhoneCall(number),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,19 +38,12 @@ class EmergencyNumScreen extends StatelessWidget {
         title: const Text('Emergency Numbers'),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(8.0),
         children: <Widget>[
-          ListTile(
-            title: const Text('Police: 100'),
-            onTap: () => _makePhoneCall('100'),
-          ),
-          ListTile(
-            title: const Text('Ambulance: 102'),
-            onTap: () => _makePhoneCall('102'),
-          ),
-          ListTile(
-            title: const Text('Fire: 101'),
-            onTap: () => _makePhoneCall('101'),
-          ),
+          _buildEmergencyTile('Police', '15', Icons.local_police, Colors.blue),
+          _buildEmergencyTile('Ambulance', '115', Icons.local_hospital, Colors.red),
+          _buildEmergencyTile('Fire', '16', Icons.local_fire_department, Colors.orange),
+          _buildEmergencyTile("Rescue Service", "1122", Icons.local_taxi_rounded, Colors.redAccent)
         ],
       ),
     );
