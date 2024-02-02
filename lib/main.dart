@@ -1,35 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:provider/provider.dart';
 import 'src/utils/theme.dart';
 import 'src/utils/constants.dart';
 import 'src/views/home_screen.dart';
+import 'src/utils/theme_provider.dart'; 
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MyApp extends StatelessWidget {
 
   @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  bool _isDarkMode = false;
-
-  void toggleTheme() {
-    setState(() {
-      _isDarkMode = !_isDarkMode;
-    });
+  void initState() {
+    _requestPermissions();
   }
 
+  Future<void> _requestPermissions() async {
+    await Permission.location.request();
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.location,
+      //Permission.callPhone,
+    ].request();
+  }
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: AppConstants.appName,
-      debugShowCheckedModeBanner: false,
-      theme: _isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme,
-      home: HomeScreen(toggleTheme: toggleTheme),
+    return ChangeNotifierProvider(
+      create: (context) => ThemeProvider(AppTheme.lightTheme),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: AppConstants.appName,
+            theme: themeProvider.getTheme(),
+            home: HomeScreen(),
+          );
+        },
+      ),
     );
   }
 }

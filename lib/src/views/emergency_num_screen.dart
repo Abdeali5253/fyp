@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../widgets/app_bar.dart';
 
 class EmergencyNumScreen extends StatelessWidget {
   const EmergencyNumScreen({Key? key}) : super(key: key);
@@ -34,9 +35,7 @@ class EmergencyNumScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Emergency Numbers'),
-      ),
+      appBar: CustomAppBar(title: 'Emergency Contacts', showHomeIcon: true),
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: <Widget>[

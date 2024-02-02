@@ -10,4 +10,5 @@ class AppTheme {
     primarySwatch: Colors.blue,
     brightness: Brightness.dark,
   );
+
 }
