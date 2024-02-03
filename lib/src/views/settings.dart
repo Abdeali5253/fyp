@@ -13,7 +13,6 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    // Improved visual styling
     TextStyle titleStyle = TextStyle(
       fontSize: 18,
       fontWeight: FontWeight.bold,
@@ -47,10 +46,8 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
 
-            // Separators for better visual grouping
-            Divider(),
+            const Divider(),
 
-            // Permission management with custom styling
             ListTile(
               leading: Icon(Icons.location_on, color: Theme.of(context).iconTheme.color),
               title: Text('Manage Location Permission', style: titleStyle),

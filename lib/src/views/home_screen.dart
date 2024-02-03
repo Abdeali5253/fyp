@@ -50,15 +50,18 @@ class SelectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.white,
-      child: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Expanded(child: Icon(choice.icon, size: 50.0, color: Colors.blue)),
-            Text(choice.title, style: TextStyle(color: Colors.black)),
-          ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Card(
+        color: Colors.white,
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Expanded(child: Icon(choice.icon, size: 50.0, color: Colors.blue)),
+              Text(choice.title, style: TextStyle(color: Colors.black)),
+            ],
+          ),
         ),
       ),
     );

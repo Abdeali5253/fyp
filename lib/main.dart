@@ -4,16 +4,23 @@ import 'package:provider/provider.dart';
 import 'src/utils/theme.dart';
 import 'src/utils/constants.dart';
 import 'src/views/home_screen.dart';
-import 'src/utils/theme_provider.dart'; 
+import 'src/utils/theme_provider.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
-  runApp(MyApp());
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-  @override
-  void initState() {
+  Future<void> initState() async {
     _requestPermissions();
   }
 
