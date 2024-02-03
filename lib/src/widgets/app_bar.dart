@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:fyp/src/views/signup.dart';
 import '../views/home_screen.dart';
 import '../views/emergency_num_screen.dart';
 import '../views/settings.dart';
@@ -46,7 +47,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   (Route<dynamic> route) => false,
             ),
           ),
-        if (title == 'Settings' || title == 'Flood Alert App')
+        if(title == 'Flood Alert App')
+        IconButton(
+          icon: const Icon(Icons.login, color: Colors.white),
+          onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                (Route<dynamic> route) => false,
+          ),
+        ),
+        if (title == 'Settings' || title == 'Flood Alert App' || title == 'Sign Up')
           IconButton(
             icon: const Icon(Icons.contact_phone, color: Colors.white),
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(

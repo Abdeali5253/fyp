@@ -18,6 +18,11 @@ dependencies:
   permission_handler: ^11.2.0
   provider: ^6.1.1
   firebase_core: ^2.25.3
+  firebase_auth: ^4.17.3
+  cloud_firestore: ^4.15.3
+  firebase_database: ^10.4.4
+  google_maps_flutter: ^2.5.3
+  geolocator: ^10.1.0
 
 dev_dependencies:
   flutter_test:
