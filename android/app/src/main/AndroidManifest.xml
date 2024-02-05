@@ -10,7 +10,7 @@
 
     <application
         android:label="fyp"
-        android:name="${applicationName}"
+        android:name=".FlutterMultiDexApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

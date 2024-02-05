@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp/src/services/location_picker_service.dart';
+import 'package:fyp/src/views/home_screen.dart';
 import 'package:fyp/src/widgets/app_bar.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../services/auth_service.dart';
+import '../widgets/custom_form.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -22,7 +26,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     final result = await Navigator.of(context).push<LatLng>(
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          appBar: AppBar(title: Text('Select Your Location')),
+          appBar: AppBar(title: const Text('Select Your Location')),
           body: LocationPicker(
             onLocationSelected: (location) {
               Navigator.of(context).pop(location);
@@ -48,7 +52,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.dispose();
   }
 
-  final _formKey = GlobalKey<FormState>(); // Add a key for the form
+  final _formKey = GlobalKey<FormState>();
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -57,18 +62,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey, // Set the form key
+          key: _formKey,
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                TextFormField(
+                CustomTextFormField(
                   controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.person),
-                  ),
+                  label: 'Name',
+                  icon: Icons.person,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
@@ -77,13 +79,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 SizedBox(height: 16.0),
-                TextFormField(
+                CustomTextFormField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.email),
-                  ),
+                  label: 'Email',
+                  icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -95,13 +94,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 SizedBox(height: 16.0),
-                TextFormField(
+                CustomTextFormField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.lock),
-                  ),
+                  label: 'Password',
+                  icon: Icons.lock,
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -113,42 +109,45 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                 ),
                 SizedBox(height: 16.0),
-                TextFormField(
+                CustomTextFormField(
                   controller: _locationController,
-                  decoration: InputDecoration(
-                    labelText: 'Location',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.location_on),
-                    suffixIcon: IconButton(
-                      icon: Icon(Icons.my_location),
-                      onPressed: _getCurrentLocation,
-                    ),
-                  ),
-                  onTap: _pickLocationWithGoogleMaps,
+                  label: 'Location',
+                  icon: Icons.location_on,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter or select your location';
                     }
                     return null;
                   },
+                  onTap: () {
+                    _pickLocationWithGoogleMaps();
+                  },
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.my_location),
+                    onPressed: () {
+                      _getCurrentLocation();
+                    },
+                  ),
                 ),
                 SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Only proceed if the form is valid (all fields passed validation)
+                      // Only proceed if the form is valid
                       _signUp();
                     }
                   },
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 15),
-                    backgroundColor: Theme.of(context).colorScheme.primary,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
-                    ), // Use primary color from theme
+                    ),
+                    backgroundColor: Colors.redAccent
                   ),
-                  child: Text('Sign Up'),
+                  child: Text('Sign Up', style: TextStyle(color: Colors.white)),
                 ),
+                SizedBox(height: 16.0),
+                _buildSocialSignUpButton(context),
               ],
             ),
           ),
@@ -159,6 +158,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _signUp() {
     // Implement the sign-up logic, e.g., calling a method from your AuthService
+    // TODO: Implement sign-up logic
+  }
+
+  Widget _buildSocialSignUpButton(BuildContext context) {
+    return ElevatedButton.icon(
+      icon: Icon(Icons.login),
+      label: Text('Sign up with Google'),
+      onPressed: () async {
+        try {
+          await _authService.signInWithGoogle();
+          // Handle successful Google sign-in
+          Navigator.of(context).push(
+              MaterialPageRoute(builder: (context) => const HomeScreen()));
+        } catch (error) {
+          // Handle sign-in error
+          // TODO: Show an error message
+        }
+      },
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white,
+        backgroundColor: Colors.blue,
+        padding: EdgeInsets.symmetric(vertical: 12),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+      ),
+    );
   }
 
   Future<void> _getCurrentLocation() async {
