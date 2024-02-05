@@ -1,13 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/src/services/location_picker_service.dart';
 import 'package:fyp/src/views/home_screen.dart';
 import 'package:fyp/src/widgets/app_bar.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../services/auth_service.dart';
-import '../widgets/custom_form.dart';
-import 'package:permission_handler/permission_handler.dart';
+import '../widgets/custom.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -20,35 +16,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _locationController = TextEditingController();
-
-  void _pickLocationWithGoogleMaps() async {
-    final result = await Navigator.of(context).push<LatLng>(
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text('Select Your Location')),
-          body: LocationPicker(
-            onLocationSelected: (location) {
-              Navigator.of(context).pop(location);
-            },
-          ),
-        ),
-      ),
-    );
-
-    if (result != null) {
-      setState(() {
-        _locationController.text = "${result.latitude}, ${result.longitude}";
-      });
-    }
-  }
 
   @override
   void dispose() {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _locationController.dispose();
     super.dispose();
   }
 
@@ -93,7 +66,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16.0),
+                const SizedBox(height: 16.0),
                 CustomTextFormField(
                   controller: _passwordController,
                   label: 'Password',
@@ -108,46 +81,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     return null;
                   },
                 ),
-                SizedBox(height: 16.0),
-                CustomTextFormField(
-                  controller: _locationController,
-                  label: 'Location',
-                  icon: Icons.location_on,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter or select your location';
-                    }
-                    return null;
-                  },
-                  onTap: () {
-                    _pickLocationWithGoogleMaps();
-                  },
-                  suffixIcon: IconButton(
-                    icon: Icon(Icons.my_location),
-                    onPressed: () {
-                      _getCurrentLocation();
-                    },
-                  ),
-                ),
                 SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      // Only proceed if the form is valid
                       _signUp();
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 15),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    backgroundColor: Colors.redAccent
+                      padding: EdgeInsets.symmetric(vertical: 15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(25),
+                      ),
+                      backgroundColor: Colors.redAccent
                   ),
                   child: Text('Sign Up', style: TextStyle(color: Colors.white)),
                 ),
                 SizedBox(height: 16.0),
-                _buildSocialSignUpButton(context),
+                Custom.buildSocialSignUpButton(context),
               ],
             ),
           ),
@@ -156,66 +107,25 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  void _signUp() {
-    // Implement the sign-up logic, e.g., calling a method from your AuthService
-    // TODO: Implement sign-up logic
-  }
-
-  Widget _buildSocialSignUpButton(BuildContext context) {
-    return ElevatedButton.icon(
-      icon: Icon(Icons.login),
-      label: Text('Sign up with Google'),
-      onPressed: () async {
-        try {
-          await _authService.signInWithGoogle();
-          // Handle successful Google sign-in
-          Navigator.of(context).push(
-              MaterialPageRoute(builder: (context) => const HomeScreen()));
-        } catch (error) {
-          // Handle sign-in error
-          // TODO: Show an error message
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.blue,
-        padding: EdgeInsets.symmetric(vertical: 12),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-      ),
-    );
-  }
-
-  Future<void> _getCurrentLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled, handle it accordingly.
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, handle it accordingly.
-        return Future.error('Location permissions are denied');
+  void _signUp() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        // Sign up user using AuthService
+        await _authService.signUp(
+          _emailController.text,
+          _passwordController.text,
+          _nameController.text,
+        );
+        // Navigate to HomeScreen upon successful signup
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
+      } on FirebaseAuthException catch (e) {
+        // Handle Firebase authentication errors
+        Custom.showErrorDialog(context, e.message);
+      } catch (e) {
+        // Handle all other errors, such as no location permission
+        Custom.showErrorDialog(context, e.toString());
       }
     }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle it accordingly.
-      return Future.error('Location permissions are permanently denied');
-    }
-
-    // When permissions are granted, continue accessing the position of the device.
-    Position position = await Geolocator.getCurrentPosition();
-    setState(() {
-      _locationController.text = "${position.latitude}, ${position.longitude}";
-    });
   }
 }
