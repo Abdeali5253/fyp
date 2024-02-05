@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/src/services/auth_service.dart';
-import 'package:fyp/src/utils/theme.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+
+import '../services/auth_service.dart';
+import '../utils/constants.dart';
+import '../utils/theme.dart';
 import '../utils/theme_provider.dart';
 import '../widgets/app_bar.dart';
 
@@ -17,28 +19,19 @@ class SettingsScreen extends StatelessWidget {
     final loggedIn = user != null ? true : false;
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    TextStyle titleStyle = TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-      color: Theme.of(context).colorScheme.primary,
-    );
-
-    TextStyle subtitleStyle = TextStyle(
-      fontSize: 16,
-      color: Theme.of(context).colorScheme.secondary,
-    );
-
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Settings', showHomeIcon: true,isUserLoggedIn: loggedIn),
+        appBar: CustomAppBar(
+            title: 'Settings', showHomeIcon: true, isUserLoggedIn: loggedIn),
         body: ListView(
           children: <Widget>[
             // Dark Mode toggle with thematic styling
             SwitchListTile(
-              title: Text('Dark Mode', style: titleStyle),
+              title: Text('Dark Mode',
+                  style: AppConstants.titleTextStyle(context)),
               subtitle: Text(
                 'Toggle between light and dark theme',
-                style: subtitleStyle,
+                style: AppConstants.subtitleTextStyle(context),
               ),
               value: themeProvider.getTheme() == AppTheme.darkTheme,
               onChanged: (bool value) {
@@ -53,20 +46,24 @@ class SettingsScreen extends StatelessWidget {
             const Divider(),
 
             ListTile(
-              leading: Icon(Icons.location_on, color: Theme.of(context).iconTheme.color),
-              title: Text('Manage Location Permission', style: titleStyle),
+              leading: Icon(Icons.location_on,
+                  color: Theme.of(context).iconTheme.color),
+              title: Text('Manage Location Permission',
+                  style: AppConstants.titleTextStyle(context)),
               subtitle: Text(
                 'Open app settings to manage location permission',
-                style: subtitleStyle,
+                style: AppConstants.subtitleTextStyle(context),
               ),
               onTap: () => _handlePermissions(context),
             ),
             ListTile(
-              leading: Icon(Icons.phone, color: Theme.of(context).iconTheme.color),
-              title: Text('Manage Phone Call Permission', style: titleStyle),
+              leading:
+                  Icon(Icons.phone, color: Theme.of(context).iconTheme.color),
+              title: Text('Manage Phone Call Permission',
+                  style: AppConstants.titleTextStyle(context)),
               subtitle: Text(
                 'Open app settings to manage phone call permission',
-                style: subtitleStyle,
+                style: AppConstants.subtitleTextStyle(context),
               ),
               onTap: () => _handlePermissions(context),
             ),

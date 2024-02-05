@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/src/widgets/app_bar.dart';
-import 'package:fyp/src/widgets/custom.dart';
-import 'package:fyp/src/widgets/custom.dart';
+
 import '../services/auth_service.dart';
+import '../utils/responsive.dart';
+import '../widgets/app_bar.dart';
+import '../widgets/customm.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -16,9 +17,13 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Login", showHomeIcon: true , isUserLoggedIn: false,),
+      appBar: CustomAppBar(
+        title: "Login",
+        showHomeIcon: true,
+        isUserLoggedIn: false,
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -64,7 +69,8 @@ class LoginScreen extends StatelessWidget {
                         );
                         // If successful, navigate to the home screen.
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => const HomeScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const HomeScreen()),
                         );
                       } catch (e) {
                         // If there is an error, display a message to the user.
@@ -79,7 +85,8 @@ class LoginScreen extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     padding: EdgeInsets.symmetric(vertical: 15),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(
+                          ResponsiveUtil.responsiveButtonCornerRadius(context)),
                     ),
                     backgroundColor: Colors.blue,
                   ),

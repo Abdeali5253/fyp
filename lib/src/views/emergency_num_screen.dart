@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/src/services/auth_service.dart';
-import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../utils/responsive.dart';
 import '../widgets/app_bar.dart';
 
 class EmergencyNumScreen extends StatelessWidget {
@@ -16,7 +17,8 @@ class EmergencyNumScreen extends StatelessWidget {
     }
   }
 
-  Widget _buildEmergencyTile(String title, String number, IconData icon, Color color) {
+  Widget _buildEmergencyTile(String title, String number, IconData icon,
+      Color color, BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       elevation: 4.0,
@@ -28,7 +30,8 @@ class EmergencyNumScreen extends StatelessWidget {
         trailing: Icon(Icons.call, color: Colors.green[700]),
         onTap: () => _makePhoneCall(number),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
+          borderRadius: BorderRadius.circular(
+              ResponsiveUtil.responsiveButtonCornerRadius(context)),
         ),
       ),
     );
@@ -36,15 +39,25 @@ class EmergencyNumScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthService auth = AuthService();
+    final user = auth.checkUser();
+    final loggedIn = user != null ? true : false;
     return Scaffold(
-      appBar: CustomAppBar(title: 'Emergency Contacts', showHomeIcon: true, isUserLoggedIn: Provider.of<AuthService>(context, listen: false).checkUser() != null,),
+      appBar: CustomAppBar(
+          title: 'Emergency Contacts',
+          showHomeIcon: true,
+          isUserLoggedIn: loggedIn),
       body: ListView(
-        padding: const EdgeInsets.all(8.0),
+        padding: EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
         children: <Widget>[
-          _buildEmergencyTile('Police', '15', Icons.local_police, Colors.blue),
-          _buildEmergencyTile('Ambulance', '115', Icons.local_hospital, Colors.red),
-          _buildEmergencyTile('Fire', '16', Icons.local_fire_department, Colors.orange),
-          _buildEmergencyTile("Rescue Service", "1122", Icons.local_taxi_rounded, Colors.redAccent)
+          _buildEmergencyTile(
+              'Police', '15', Icons.local_police, Colors.blue, context),
+          _buildEmergencyTile(
+              'Ambulance', '115', Icons.local_hospital, Colors.red, context),
+          _buildEmergencyTile('Fire', '16', Icons.local_fire_department,
+              Colors.orange, context),
+          _buildEmergencyTile("Rescue Service", "1122",
+              Icons.local_taxi_rounded, Colors.redAccent, context)
         ],
       ),
     );

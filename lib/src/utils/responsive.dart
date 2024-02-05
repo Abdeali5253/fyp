@@ -54,4 +54,34 @@ class ResponsiveUtil {
       return mobile;
     }
   }
+
+  static double responsiveIconSize(BuildContext context) {
+    if (isDesktop(context)) {
+      return AppConstants.iconSizeLarge;
+    } else if (isTablet(context)) {
+      return AppConstants.iconSizeMedium;
+    } else {
+      return AppConstants.iconSizeSmall;
+    }
+  }
+
+  static double responsiveButtonHeight(BuildContext context) {
+    if (isDesktop(context)) {
+      return AppConstants.buttonHeightLarge;
+    } else if (isTablet(context)) {
+      return AppConstants.buttonHeightMedium;
+    } else {
+      return AppConstants.buttonHeightSmall;
+    }
+  }
+
+  static double responsiveButtonCornerRadius(BuildContext context) {
+    if (isDesktop(context)) {
+      return AppConstants.buttonCornerRadiusLarge;
+    } else if (isTablet(context)) {
+      return AppConstants.buttonCornerRadiusMedium;
+    } else {
+      return AppConstants.buttonCornerRadiusSmall;
+    }
+  }
 }

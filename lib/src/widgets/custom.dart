@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/src/views/home_screen.dart';
+
 import '../services/auth_service.dart';
+import '../utils/responsive.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
@@ -45,7 +47,7 @@ class CustomTextFormField extends StatelessWidget {
 class Custom {
   static final AuthService _authService = AuthService();
 
-  static showErrorDialog(BuildContext context , String? message) {
+  static showErrorDialog(BuildContext context, String? message) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -83,10 +85,10 @@ class Custom {
         backgroundColor: Colors.blue,
         padding: EdgeInsets.symmetric(vertical: 12),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(25),
+          borderRadius: BorderRadius.circular(
+              ResponsiveUtil.responsiveButtonCornerRadius(context)),
         ),
       ),
     );
   }
-
 }

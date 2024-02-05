@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/src/services/auth_service.dart';
-import '../widgets/app_bar.dart';
-import '../utils/responsive.dart';
+import 'package:fyp/src/utils/constants.dart';
 import 'package:provider/provider.dart';
+
+import '../utils/responsive.dart';
 import '../utils/theme_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import '../widgets/app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,20 +26,21 @@ class HomeScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(
-          title: 'Flood Alert App',
-          isUserLoggedIn: loggedIn
-        ),
+        appBar:
+            CustomAppBar(title: 'Flood Alert App', isUserLoggedIn: loggedIn),
         body: Column(
           children: [
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text('Hello $greetingName',
-                    style:
-                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+            if (loggedIn)
+              Center(
+                child: Padding(
+                  padding:
+                      EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
+                  child: Text(
+                    'Welcome $greetingName',
+                    style: AppConstants.titleStyle(context),
+                  ),
+                ),
               ),
-            ),
             Expanded(
               child: GridView.count(
                 crossAxisCount: crossAxisCount,
@@ -59,6 +61,7 @@ class HomeScreen extends StatelessWidget {
 
 class Choice {
   const Choice({required this.title, required this.icon});
+
   final String title;
   final IconData icon;
 }
@@ -66,6 +69,7 @@ class Choice {
 const List<Choice> choices = <Choice>[
   Choice(title: 'Alerts', icon: Icons.warning),
   Choice(title: 'Map', icon: Icons.map),
+  Choice(title: "Complain", icon: Icons.comment)
 ];
 
 class SelectCard extends StatelessWidget {
@@ -75,7 +79,7 @@ class SelectCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
       child: Card(
         color: Colors.white,
         child: Center(
@@ -83,7 +87,9 @@ class SelectCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Expanded(
-                  child: Icon(choice.icon, size: 50.0, color: Colors.blue)),
+                  child: Icon(choice.icon,
+                      size: ResponsiveUtil.responsiveIconSize(context),
+                      color: Colors.blue)),
               Text(choice.title, style: TextStyle(color: Colors.black)),
             ],
           ),

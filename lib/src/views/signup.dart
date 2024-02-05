@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fyp/src/views/home_screen.dart';
-import 'package:fyp/src/widgets/app_bar.dart';
+
 import '../services/auth_service.dart';
+import '../utils/responsive.dart';
+import '../widgets/app_bar.dart';
 import '../widgets/custom.dart';
-import 'login.dart';
+import 'home_screen.dart';
+import 'logiin.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -32,9 +34,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Sign Up", showHomeIcon: true, isUserLoggedIn: false,),
+      appBar: CustomAppBar(
+        title: "Sign Up",
+        showHomeIcon: true,
+        isUserLoggedIn: false,
+      ),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
         child: Form(
           key: _formKey,
           child: SingleChildScrollView(
@@ -92,10 +98,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   style: ElevatedButton.styleFrom(
                       padding: EdgeInsets.symmetric(vertical: 15),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(25),
+                        borderRadius: BorderRadius.circular(
+                            ResponsiveUtil.responsiveButtonCornerRadius(
+                                context)),
                       ),
-                      backgroundColor: Colors.redAccent
-                  ),
+                      backgroundColor: Colors.redAccent),
                   child: Text('Sign Up', style: TextStyle(color: Colors.white)),
                 ),
                 SizedBox(height: 16.0),
