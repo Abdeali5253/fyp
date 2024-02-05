@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:fyp/src/services/auth_service.dart';
 import 'package:fyp/src/views/signup.dart';
 import '../views/home_screen.dart';
 import '../views/emergency_num_screen.dart';
@@ -10,17 +10,21 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Size preferredSize;
   final String title;
   final bool showHomeIcon;
+  final bool isUserLoggedIn;
+  final AuthService auth = AuthService();
 
-  const CustomAppBar({
+
+   CustomAppBar({
     Key? key,
     required this.title,
     this.showHomeIcon = false,
+     required this.isUserLoggedIn,
   }) : preferredSize = const Size.fromHeight(60.0),
         super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Dynamic gradient based on app theme
+    final user = auth.checkUser();
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final gradientColors = isDarkMode
         ? [Colors.blueGrey.shade800, Colors.black87]
@@ -28,7 +32,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
     return AppBar(
       title: Text(title, style: TextStyle(color: isDarkMode ? Colors.white : Colors.white)),
-      backgroundColor: Colors.transparent, // Making AppBar background transparent
+      centerTitle: true,
+      backgroundColor: Colors.transparent,
       flexibleSpace: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -47,7 +52,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   (Route<dynamic> route) => false,
             ),
           ),
-        if(title == 'Flood Alert App')
+        if(isUserLoggedIn)
         IconButton(
           icon: const Icon(Icons.login, color: Colors.white),
           onPressed: () => Navigator.of(context).pushAndRemoveUntil(

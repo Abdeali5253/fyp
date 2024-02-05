@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/src/services/auth_service.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../widgets/app_bar.dart';
 
@@ -35,7 +37,7 @@ class EmergencyNumScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Emergency Contacts', showHomeIcon: true),
+      appBar: CustomAppBar(title: 'Emergency Contacts', showHomeIcon: true, isUserLoggedIn: Provider.of<AuthService>(context, listen: false).checkUser() != null,),
       body: ListView(
         padding: const EdgeInsets.all(8.0),
         children: <Widget>[

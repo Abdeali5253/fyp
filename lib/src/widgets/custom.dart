@@ -43,7 +43,7 @@ class CustomTextFormField extends StatelessWidget {
 }
 
 class Custom {
-  static AuthService _authService = AuthService();
+  static final AuthService _authService = AuthService();
 
   static showErrorDialog(BuildContext context , String? message) {
     showDialog(

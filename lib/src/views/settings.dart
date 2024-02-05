@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/src/services/auth_service.dart';
 import 'package:fyp/src/utils/theme.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthService auth = AuthService();
+    final user = auth.checkUser();
+    final loggedIn = user != null ? true : false;
     final themeProvider = Provider.of<ThemeProvider>(context);
 
     TextStyle titleStyle = TextStyle(
@@ -26,7 +30,7 @@ class SettingsScreen extends StatelessWidget {
 
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Settings', showHomeIcon: true),
+        appBar: CustomAppBar(title: 'Settings', showHomeIcon: true,isUserLoggedIn: loggedIn),
         body: ListView(
           children: <Widget>[
             // Dark Mode toggle with thematic styling

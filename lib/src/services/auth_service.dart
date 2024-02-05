@@ -24,25 +24,32 @@ class AuthService {
     }
   }
 
-  Future<UserCredential> signUp(
-      String email, String password, String name) async {
-    UserCredential result = await _auth.createUserWithEmailAndPassword(
-        email: email, password: password);
+  Future<User> signUp(String email, String password, String name) async {
+    UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
     User? user = result.user;
 
-    // After the user is created, get the current location
-    String location = await _getCurrentLocation();
+    if (user != null) {
+      // Update the user's displayName with the provided name
+      await user.updateDisplayName(name);
+      await user.reload(); // Reload user to ensure displayName is updated
 
-    // Save user details in Firestore along with the location
-    await _firestore.collection('users').doc(user!.uid).set({
-      'name': name,
-      'email': email,
-      'password': password,
-      'location': location,
-    });
+      // Optionally, get the current location if needed
+      String location = await _getCurrentLocation();
 
-    return result;
+      // Save user details in Firestore, including location if necessary
+      // await _firestore.collection('users').doc(user.uid).set({
+      //   'name': name,
+      //   'email': email,
+      //   'location': location,
+      // });
+
+      // Return the updated user
+      return FirebaseAuth.instance.currentUser!;
+    } else {
+      throw FirebaseAuthException(code: 'ERROR_USER_NOT_CREATED', message: 'User could not be created.');
+    }
   }
+
 
   Future<String> _getCurrentLocation() async {
     LocationPermission permission = await Geolocator.checkPermission();
@@ -63,4 +70,14 @@ class AuthService {
       throw Exception('Location permissions are denied');
     }
   }
+
+  Future<UserCredential> login(String email, String password) async {
+    UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+    return result;
+  }
+
+  User? checkUser() {
+    return _auth.currentUser;
+  }
+
 }

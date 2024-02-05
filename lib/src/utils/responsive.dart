@@ -2,6 +2,31 @@ import 'package:flutter/material.dart';
 import 'constants.dart';
 
 class ResponsiveUtil {
+  static bool isDesktop(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return screenWidth >= AppConstants.desktopWidth;
+  }
+
+  static double responsiveFontSize(BuildContext context) {
+    if (isDesktop(context)) {
+      return AppConstants.fontSizeLarge;
+    } else if (isTablet(context)) {
+      return AppConstants.fontSizeMedium;
+    } else {
+      return AppConstants.fontSizeSmall;
+    }
+  }
+
+  static double responsivePadding(BuildContext context) {
+    if (isDesktop(context)) {
+      return AppConstants.paddingLarge;
+    } else if (isTablet(context)) {
+      return AppConstants.paddingMedium;
+    } else {
+      return AppConstants.paddingSmall;
+    }
+  }
+
   static bool isPortrait(BuildContext context) {
     return MediaQuery.of(context).orientation == Orientation.portrait;
   }

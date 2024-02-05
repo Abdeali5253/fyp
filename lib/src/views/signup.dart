@@ -4,6 +4,7 @@ import 'package:fyp/src/views/home_screen.dart';
 import 'package:fyp/src/widgets/app_bar.dart';
 import '../services/auth_service.dart';
 import '../widgets/custom.dart';
+import 'login.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -31,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: "Sign Up", showHomeIcon: true),
+      appBar: CustomAppBar(title: "Sign Up", showHomeIcon: true, isUserLoggedIn: false,),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Form(
@@ -99,6 +100,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 SizedBox(height: 16.0),
                 Custom.buildSocialSignUpButton(context),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                  child: const Text(
+                    'Already have an account? Login',
+                    style: TextStyle(color: Colors.blue),
+                  ),
+                ),
               ],
             ),
           ),
