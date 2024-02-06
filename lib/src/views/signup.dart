@@ -6,7 +6,7 @@ import '../utils/responsive.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/custom.dart';
 import 'home_screen.dart';
-import 'logiin.dart';
+import 'login.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);

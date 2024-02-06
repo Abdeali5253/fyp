@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:fyp/src/widgets/floatingButton.dart';
 
 import '../services/auth_service.dart';
 import '../utils/responsive.dart';
 import '../widgets/app_bar.dart';
-import '../widgets/customm.dart';
+import '../widgets/custom.dart';
 import 'home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -22,6 +23,7 @@ class LoginScreen extends StatelessWidget {
         showHomeIcon: true,
         isUserLoggedIn: false,
       ),
+      floatingActionButton: const EmergencyFloatingActionButton(),
       body: Padding(
         padding: EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
         child: Form(

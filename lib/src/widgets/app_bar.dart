@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fyp/src/views/signup.dart';
 
 import '../utils/responsive.dart';
-import '../views/emergency_num_screen.dart';
 import '../views/home_screen.dart';
 import '../views/settings.dart';
+import '../views/signup.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
@@ -31,7 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title,
           style: TextStyle(
-            color: isDarkMode ? Colors.white : Colors.white,
+            color: Colors.white,
             fontSize: ResponsiveUtil.responsiveFontSize(context),
           )),
       centerTitle: true,
@@ -47,42 +46,40 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: <Widget>[
         if (showHomeIcon)
-          IconButton(
-            icon: const Icon(Icons.home, color: Colors.white),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-              (Route<dynamic> route) => false,
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: IconButton(
+              icon: const Icon(Icons.home, color: Colors.white),
+              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
+                (Route<dynamic> route) => false,
+              ),
             ),
           ),
         if (isUserLoggedIn)
-          IconButton(
-            icon: const Icon(Icons.login, color: Colors.white),
-            onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(builder: (context) => const SignUpScreen()),
-              (Route<dynamic> route) => false,
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: IconButton(
+              icon: const Icon(Icons.login, color: Colors.white),
+              onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => const SignUpScreen()),
+                (Route<dynamic> route) => false,
+              ),
             ),
           ),
-        if (title == 'Settings' ||
-            title == 'Flood Alert App' ||
-            title == 'Sign Up')
-          IconButton(
-            icon: const Icon(Icons.contact_phone, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const EmergencyNumScreen())),
-          ),
-        if (title == 'Emergency Contacts' || title == 'Flood Alert App')
-          IconButton(
-            icon: const Icon(Icons.settings, color: Colors.white),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => const SettingsScreen())),
+        if (title == 'Flood Alert App' || title == 'Sign Up')
+          Padding(
+            padding: const EdgeInsets.only(right: 16.0),
+            child: IconButton(
+              icon: const Icon(Icons.settings, color: Colors.white),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const SettingsScreen())),
+            ),
           ),
       ],
       elevation: 10.0,
-      // Adds shadow for depth
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(30), // Rounded bottom edges
-        ),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(bottom: Radius.circular(30)),
       ),
     );
   }

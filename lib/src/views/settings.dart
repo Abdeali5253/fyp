@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:fyp/src/widgets/floatingButton.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +24,7 @@ class SettingsScreen extends StatelessWidget {
       child: Scaffold(
         appBar: CustomAppBar(
             title: 'Settings', showHomeIcon: true, isUserLoggedIn: loggedIn),
+        floatingActionButton: const EmergencyFloatingActionButton(),
         body: ListView(
           children: <Widget>[
             // Dark Mode toggle with thematic styling

@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fyp/src/services/auth_service.dart';
-import 'package:fyp/src/utils/constants.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/constants.dart';
 import '../utils/responsive.dart';
 import '../utils/theme_provider.dart';
 import '../widgets/app_bar.dart';
+import '../widgets/floatingButton.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -21,26 +22,26 @@ class HomeScreen extends StatelessWidget {
     final int crossAxisCount = ResponsiveUtil.responsiveValue(
       context: context,
       mobile: 2,
-      tablet: 4,
+      tablet: 3,
     ).round();
 
     return SafeArea(
       child: Scaffold(
         appBar:
-            CustomAppBar(title: 'Flood Alert App', isUserLoggedIn: loggedIn),
+            CustomAppBar(title: 'Flood Alert App', isUserLoggedIn: !loggedIn),
+        floatingActionButton: const EmergencyFloatingActionButton(),
         body: Column(
           children: [
-            if (loggedIn)
-              Center(
-                child: Padding(
-                  padding:
-                      EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
-                  child: Text(
-                    'Welcome $greetingName',
-                    style: AppConstants.titleStyle(context),
-                  ),
+            Center(
+              child: Padding(
+                padding:
+                    EdgeInsets.all(ResponsiveUtil.responsivePadding(context)),
+                child: Text(
+                  'Welcome $greetingName',
+                  style: AppConstants.titleStyle(context),
                 ),
               ),
+            ),
             Expanded(
               child: GridView.count(
                 crossAxisCount: crossAxisCount,
@@ -90,7 +91,10 @@ class SelectCard extends StatelessWidget {
                   child: Icon(choice.icon,
                       size: ResponsiveUtil.responsiveIconSize(context),
                       color: Colors.blue)),
-              Text(choice.title, style: TextStyle(color: Colors.black)),
+              Text(choice.title,
+                  style: TextStyle(
+                      fontSize: ResponsiveUtil.responsiveFontSize(context),
+                      color: Colors.black)),
             ],
           ),
         ),
